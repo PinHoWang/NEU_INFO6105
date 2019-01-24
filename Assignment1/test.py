@@ -45,9 +45,11 @@ train, test = train_test_split(df, test_size=0.3, shuffle=True)
 #        'Climate_label','Service']
 
 
+trainPlot = []
+testPlot = []
 x = []
-y = []
 for hyper in range(2, gdp_corr_seq.size):
+# for hyper in range(2, 3):
     training_features = gdp_corr_seq[0:hyper].index[:]
     # print(training_features)
     target = 'GDP ($ per capita)'
@@ -57,11 +59,12 @@ for hyper in range(2, gdp_corr_seq.size):
     test_Y = test[target]
 
     model = LinearRegression()
-    model.fit(train_X, train_Y)
+    model.fit(train_X, train_Y) # Training the model
     train_pred_Y = model.predict(train_X)
     test_pred_Y = model.predict(test_X)
     train_pred_Y = pd.Series(train_pred_Y.clip(0, train_pred_Y.max()), index=train_Y.index)
     test_pred_Y = pd.Series(test_pred_Y.clip(0, test_pred_Y.max()), index=test_Y.index)
+
 
     rmse_train = np.sqrt(mean_squared_error(train_pred_Y, train_Y))
     msle_train = mean_squared_log_error(train_pred_Y, train_Y)
@@ -74,11 +77,12 @@ for hyper in range(2, gdp_corr_seq.size):
     # print('rmse_train:',rmse_train)
     # print('rmse_test:',rmse_test)
     # print('')
-    x.extend([rmse_train])
-    y.extend([rmse_test])
+    x.extend([hyper])
+    trainPlot.extend([rmse_train])
+    testPlot.extend([rmse_test])
 
-plt.plot(x, 'r+')
-plt.plot(y, 'bo')
+plt.plot(x, trainPlot, 'r+')
+plt.plot(x, testPlot, 'bo')
 plt.show()
 
 
