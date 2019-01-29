@@ -84,5 +84,5 @@ for hyper in range(2, gdp_corr_seq.size):
 plt.plot(x, trainPlot, 'r+')
 plt.plot(x, testPlot, 'bo')
 plt.show()
-
+# print(gdp_corr_seq)
 
